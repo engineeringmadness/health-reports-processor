@@ -13,3 +13,8 @@ CREATE TABLE prescription_schedule (
 	medicine_name text,
 	frequency text
 );
+
+CREATE TABLE ocr_output (
+	document_id character varying(256) primary key,
+	raw_data text
+);

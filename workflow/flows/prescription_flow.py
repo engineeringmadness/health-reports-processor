@@ -13,7 +13,9 @@ def main_flow(image_path: str, extension: str, prescription_id: str):
     encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
 
     # OCR
-    text = extract_text_from_doc(image=encoded_image, image_type=extension.lower())
+    text = extract_text_from_doc(image=encoded_image,
+                                 image_type=extension.lower(),
+                                 document_id=prescription_id)
     print('========================================')
     print(text)
 
