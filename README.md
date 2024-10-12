@@ -1,10 +1,10 @@
 # Core Workflow
 
-This repo contains batch jobs which will process the incoming scan of medical prescriptions / reports etc. The jobs are defined as workflows using Prefect framework which supports local development as well as
+This repo contains batch jobs which will process the incoming scan of medical prescriptions / reports etc. The jobs are defined as workflows using Prefect library which supports local development as well as
 docker / kubernetes deployments.
 
 ## Dependencies
-1. prefect (workflow framework)
+1. prefect (workflow library)
 2. anthropic (Claude LLM)
 3. psycopg2 (PostgreSQL)
 4. sqlalchemy (ORM)
@@ -23,7 +23,7 @@ docker / kubernetes deployments.
 > conda activate medicine
 
 > pip install -r requirements.txt
-3. Prefect framework requires a server and worker node to be running for viewing and executing flows. use the starter scripts to spin up both
+3. Prefect library requires a server and worker node to be running for viewing and executing flows. use the starter scripts to spin up both
 > .\start_prefect.ps1
 4. Start core workflow application
 > Run file workflow\deploy_flow.py from Pycharm or VS code if you want to use GUI to trigger flow
