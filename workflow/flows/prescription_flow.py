@@ -1,6 +1,7 @@
 from markdown_it.rules_inline import image
 from prefect import flow
-from workflow.conversion.prescription_structured_outputs import convert_to_json
+from workflow.conversion.structured_outputs import convert_to_json
+from workflow.conversion.prompts import SpecificPrompts
 from workflow.extraction.common_ocr import extract_text_from_doc
 from workflow.data_storage.db_save import save_data_to_db
 import base64
@@ -20,7 +21,9 @@ def main_flow(image_path: str, extension: str, prescription_id: str):
     print(text)
 
     # Convert to JSON
-    json = convert_to_json(text)
+    json = convert_to_json(doc_text=text,
+                           schema_file='prescription.json',
+                           specific_prompt=SpecificPrompts.PRESCRIPTION)
     print('========================================')
     print(json)
 

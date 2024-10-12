@@ -4,10 +4,10 @@ from prefect import task
 import os
 
 @task(name='Structured Outputs', description='Translate the provided text into JSON schema')
-def convert_to_json(doc_text: str)-> dict:
+def convert_to_json(doc_text: str, schema_file: str, specific_prompt)-> dict:
     agent = get_claude_agent()
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    f = open(os.path.join(current_dir, '..', 'schemas', 'prescription.json'), 'r')
+    f = open(os.path.join(current_dir, '..', 'schemas', schema_file), 'r')
     schema = f.read()
     f.close()
 
@@ -21,7 +21,7 @@ def convert_to_json(doc_text: str)-> dict:
                     {
                         "type": "text",
                         "text": f"""
-                            From the below text of a medical prescription, extract the precise medicine names and their frequencies and doctor details in the json format.
+                            {specific_prompt}
                             If any attribute is not found in the text extract output it as empty string in the JSON.
                             Do not give any extra text in the output apart from the JSON.
 
