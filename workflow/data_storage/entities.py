@@ -22,3 +22,9 @@ class PrescriptionSchedule(Base):
     prescription_id = db.Column(db.String(256))
     medicine_name = db.Column(db.Text)
     frequency = db.Column(db.Text)
+
+class OcrOutput(Base):
+    __tablename__ = 'ocr_output'
+
+    document_id = db.Column(db.String(256), primary_key=True)
+    raw_data = db.Column(db.Text)

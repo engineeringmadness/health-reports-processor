@@ -1,4 +1,4 @@
-from workflow.prefect_flow import main_flow
+from workflow.flows.prescription_flow import main_flow
 import uuid
 
 if __name__ == '__main__':

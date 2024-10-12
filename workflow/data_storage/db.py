@@ -10,6 +10,7 @@ class PostgresConnection:
         self.host = os.environ['PG_HOST']
         self.port = os.environ['PG_PORT']
         self.database = os.environ['PG_DATABASE']
+        # Setup connection pooling to handle multiple workflows using common connection
         self.engine = create_engine(
             url=f'postgresql+psycopg2://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}',
             pool_size=10,

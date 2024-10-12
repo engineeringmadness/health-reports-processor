@@ -21,7 +21,7 @@ def convert_to_json(doc_text: str)-> dict:
                     {
                         "type": "text",
                         "text": f"""
-                            From the below text extract the precise medicine names and their frequencies and doctor details in the json format.
+                            From the below text extract of a medical prescription the precise medicine names and their frequencies and doctor details in the json format.
                             Do not give any extra text in the output apart from the JSON.
 
                             ###
