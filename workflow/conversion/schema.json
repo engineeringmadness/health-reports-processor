@@ -1,0 +1,12 @@
+{
+  "doctorName": "",
+  "prescriptionDate": "",
+  "doctorAddress": "",
+  "diagnoses": "",
+  "medicines": [
+    {
+      "medicineName": "",
+      "medicineFrequency": ""
+    }
+  ]
+}
