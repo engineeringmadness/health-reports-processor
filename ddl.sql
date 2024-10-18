@@ -1,7 +1,3 @@
-CREATE DATABASE prescriptions;
-
-CREATE DATABASE prefect;
-
 CREATE TABLE prescription_attributes (
 	id bigserial primary key,
 	prescription_id character varying(256),
