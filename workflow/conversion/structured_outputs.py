@@ -1,16 +1,19 @@
 import json
 from workflow.utils.agent import get_claude_agent
-from prefect import task
+from prefect import task, get_run_logger
 import os
 
 @task(name='Structured Outputs', description='Translate the provided text into JSON schema')
 def convert_to_json(doc_text: str, schema_file: str, specific_prompt)-> dict:
-    agent = get_claude_agent()
+    logger = get_run_logger()
     current_dir = os.path.dirname(os.path.abspath(__file__))
     f = open(os.path.join(current_dir, '..', 'schemas', schema_file), 'r')
     schema = f.read()
     f.close()
+    logger.info('Transformation Schema: ')
+    logger.info(schema)
 
+    agent = get_claude_agent()
     response = agent.messages.create(
         model=os.environ['STRUCTURED_OUTPUTS_MODEL'],
         max_tokens=1000,

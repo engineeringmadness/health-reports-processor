@@ -1,11 +1,12 @@
 import os
 from workflow.utils.agent import get_claude_agent
-from prefect import task
+from prefect import task, get_run_logger
 from workflow.data_storage.repo import save_raw_data
 
 @task(name='OCR', description='Extracting the text of the document using Claude Vision API')
 def extract_text_from_doc(image: str, image_type: str, document_id: str)-> str:
-    print('Image type: ' + image_type)
+    logger = get_run_logger()
+    logger.info('Image type: ' + image_type)
     agent = get_claude_agent()
 
     response = agent.messages.create(
