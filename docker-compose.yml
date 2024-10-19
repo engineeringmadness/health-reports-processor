@@ -1,0 +1,57 @@
+x-common-variables: &common-variables
+  PREFECT_API_URL: http://host.docker.internal:4200/api
+  PG_USER: postgres
+  PG_PASSWORD: ${PG_PASSWORD}
+  PG_HOST: host.docker.internal
+  PG_PORT: 5432
+  PG_DATABASE: prescriptions
+  ANTHROPIC_KEY: ${ANTHROPIC_KEY}
+  OCR_MODEL: claude-3-5-sonnet-20240620
+  STRUCTURED_OUTPUTS_MODEL: claude-3-haiku-20240307
+
+services:
+
+  server:
+    image: prefecthq/prefect:3.0.8-python3.12
+    restart: always
+    volumes:
+      - prefect:/root/.prefect
+    entrypoint: ["/opt/prefect/entrypoint.sh", "prefect", "server", "start"]
+    environment:
+      <<: *common-variables
+      PREFECT_UI_URL: http://host.docker.internal:4200/api
+      PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://postgres:${PG_PASSWORD}@host.docker.internal:5432/prefect
+      PREFECT_RESULTS_PERSIST_BY_DEFAULT: true
+      PREFECT_LOCAL_STORAGE_PATH: '/root/results/'
+      PREFECT_SERVER_API_HOST: 0.0.0.0
+    ports:
+      - 4200:4200
+    networks:
+      - default
+
+
+  rx-flow:
+    image: rx-workflow:0.1.0
+    entrypoint: ["python", "workflow/deploy_main_flow.py"]
+    volumes:
+      - "C:/Users/karan/OneDrive/Desktop/:/input/"
+    environment:
+      <<: *common-variables
+    networks:
+      - default
+
+  healthcheck:
+    image: rx-workflow:0.1.0
+    entrypoint: ["python", "workflow/deploy_healthcheck.py"]
+    volumes:
+      - "C:/Users/karan/OneDrive/Desktop/:/input/"
+    environment:
+      <<: *common-variables
+    networks:
+      - default
+
+volumes:
+  prefect:
+networks:
+  default:
+    name: prefect-network

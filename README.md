@@ -23,22 +23,36 @@ docker / kubernetes deployments.
 > conda activate medicine
 
 > pip install -r requirements.txt
-3. Prefect library requires a server and worker node to be running for viewing and executing flows. use the starter scripts to spin up both
+
+4. Install PostgreSQL and pgAdmin4 - https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+5. Create 2 databases called "prefect" and "prescriptions"
+6. Run queries present in ddl.sql in prescriptions DB
+7. Create a file called env_file in root directory with following content (update values for password and key).
+PG_PASSWORD & ANTHROPIC_KEY needs to be set as environment variable in windows for prefect server to use
+
+```
+PG_USER=postgres
+PG_PASSWORD=
+PG_HOSTNAME=localhost
+PG_PORT=5432
+PG_DATABASE=prescriptions
+PG_HOST=localhost
+ANTHROPIC_KEY=
+OCR_MODEL=claude-3-5-sonnet-20240620
+STRUCTURED_OUTPUTS_MODEL=claude-3-haiku-20240307
+```
+
+8. Prefect library requires a server to be running for viewing and executing flows. use the starter scripts to spin it up
 > .\start_prefect.ps1
-4. Start core workflow application
-> Run file workflow\deploy_flow.py from Pycharm or VS code if you want to use GUI to trigger flow
+9. Start core workflow application
+> Run file workflow\deploy_main_flow.py from Pycharm or VS code if you want to use GUI to trigger flow
 
-> Run file workflow\local_run.py from Pycharm or VS Code if you want to run the flow from command line itself
-
-5. Navigate to http://localhost:4200/ and go to deployments tab
+10. Navigate to http://localhost:4200/ and go to deployments tab
 
 ![image](https://github.com/user-attachments/assets/7b576e5c-1980-47a1-bd84-6d6b9a85051e)
 
-6. Click on 3 dots -> quick run -> Feed in required parameters and click Run
+11. Click on 3 dots -> quick run -> Feed in required parameters and click Run
 ![image](https://github.com/user-attachments/assets/f06fcfaa-a39d-44db-82e2-38cf6cbd259a)
 
-7. Go to runs tab to see execution
+12. Go to runs tab to see execution
 ![image](https://github.com/user-attachments/assets/392b150a-1b94-4ee8-95b2-3377f3999c6b)
-
-
-
