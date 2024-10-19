@@ -5,7 +5,6 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 WORKDIR /root/flows
-COPY env_file ./env_file
 COPY workflow ./workflow
 
 ENV PREFECT_API_URL=http://host.docker.internal:4200/api

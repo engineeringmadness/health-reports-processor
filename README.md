@@ -27,7 +27,8 @@ docker / kubernetes deployments.
 4. Install PostgreSQL and pgAdmin4 - https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 5. Create 2 databases called "prefect" and "prescriptions"
 6. Run queries present in ddl.sql in prescriptions DB
-7. Create a file called env_file in root directory with following content (update values for password and key). PG_PASSWORD needs to be set as env variable for prefect server to use
+7. Create a file called env_file in root directory with following content (update values for password and key).
+PG_PASSWORD & ANTHROPIC_KEY needs to be set as environment variable in windows for prefect server to use
 
 ```
 PG_USER=postgres
