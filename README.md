@@ -56,3 +56,13 @@ STRUCTURED_OUTPUTS_MODEL=claude-3-haiku-20240307
 
 12. Go to runs tab to see execution
 ![image](https://github.com/user-attachments/assets/392b150a-1b94-4ee8-95b2-3377f3999c6b)
+
+## Run in docker
+
+Go to docker-compose.yml file and update the volume mount path which currently points to my desktop folder
+Images that need to be submitted to workflow should be saved in this folder and while triggering flow file_path should be /input/<file-name>
+
+> docker build -t rx-workflow:0.1.0 .
+
+> docker compose up
+
