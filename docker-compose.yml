@@ -18,7 +18,7 @@ services:
     ports:
       - "5455:5455"
     volumes:
-      - C:/Users/karan/LocalPostgres:/var/lib/postgresql/data
+      - C:/Users/${USERNAME}/LocalPostgres:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=${PG_PASSWORD}
       - POSTGRES_USER=postgres
@@ -50,7 +50,7 @@ services:
     image: rx-workflow:0.1.0
     entrypoint: ["python", "workflow/deploy_main_flow.py"]
     volumes:
-      - C:/Users/karan/OneDrive/Desktop:/input
+      - C:/Users/${USERNAME}/OneDrive/Desktop:/input
     environment:
       <<: *common-variables
     networks:
@@ -60,7 +60,7 @@ services:
     image: rx-workflow:0.1.0
     entrypoint: ["python", "workflow/deploy_healthcheck.py"]
     volumes:
-      - C:/Users/karan/OneDrive/Desktop:/input
+      - C:/Users/${USERNAME}/OneDrive/Desktop:/input
     environment:
       <<: *common-variables
     networks:
