@@ -1,0 +1,8 @@
+PG_USER=postgres
+PG_HOSTNAME=localhost
+PG_PORT=5455
+PG_DATABASE=prescriptions
+PG_HOST=localhost
+PG_APP_SCHEMA=app_main
+OCR_MODEL=claude-3-5-sonnet-20240620
+STRUCTURED_OUTPUTS_MODEL=claude-3-haiku-20240307

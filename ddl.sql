@@ -1,4 +1,6 @@
-CREATE TABLE prescription_attributes (
+CREATE SCHEMA IF NOT EXISTS app_main AUTHORIZATION postgres;
+
+CREATE TABLE IF NOT EXISTS app_main.prescription_attributes (
 	id bigserial primary key,
 	prescription_id character varying(256),
 	prescription_date character varying(50),
@@ -7,14 +9,14 @@ CREATE TABLE prescription_attributes (
 	diagnoses text
 );
 
-CREATE TABLE prescription_schedule (
+CREATE TABLE IF NOT EXISTS app_main.prescription_schedule (
 	id bigserial primary key,
 	prescription_id character varying(256),
 	medicine_name text,
 	frequency text
 );
 
-CREATE TABLE ocr_output (
+CREATE TABLE IF NOT EXISTS app_main.ocr_output (
 	document_id character varying(256) primary key,
 	raw_data text
 );
