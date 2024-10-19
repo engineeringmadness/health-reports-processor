@@ -32,6 +32,7 @@ docker / kubernetes deployments.
 ### Run entire system via docker
 
 > docker build -t rx-flow:0.1.0 .
+
 > docker compose up
 
 ### To Run Flow code only via IDE (Skip if you want to run entire system via docker compose)
