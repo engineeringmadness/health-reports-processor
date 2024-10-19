@@ -15,6 +15,27 @@ docker / kubernetes deployments.
 
 ## Get Started
 
+### Prerequisites
+
+- Install and setup Rancher Desktop, Miniconda, IDE of your choice for PostgreSQL and Python
+- PG_PASSWORD & ANTHROPIC_KEY needs to be set as environment variable in windows.
+
+### Database initial setup
+> docker compose up postgres
+
+2. Login to DB and execute content of ddl.sql
+
+### Run Server and DB
+
+> docker compose up postgres server healthcheck
+
+### Run entire system via docker
+
+> docker build -t rx-flow:0.1.0 .
+> docker compose up
+
+### To Run Flow code only via IDE (Skip if you want to run entire system via docker compose)
+
 1. Install Miniconda python runtime - https://docs.anaconda.com/miniconda/. While installing ensure to check the box for adding miniconda to path or add the location manually to path variable
 ![image](https://github.com/user-attachments/assets/04d4a847-73c0-4fa2-b5ed-0c267f07ba1d)
 2. Create a new conda environment
@@ -24,45 +45,15 @@ docker / kubernetes deployments.
 
 > pip install -r requirements.txt
 
-4. Install PostgreSQL and pgAdmin4 - https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
-5. Create 2 databases called "prefect" and "prescriptions"
-6. Run queries present in ddl.sql in prescriptions DB
-7. Create a file called env_file in root directory with following content (update values for password and key).
-PG_PASSWORD & ANTHROPIC_KEY needs to be set as environment variable in windows for prefect server to use
-
-```
-PG_USER=postgres
-PG_PASSWORD=
-PG_HOSTNAME=localhost
-PG_PORT=5432
-PG_DATABASE=prescriptions
-PG_HOST=localhost
-ANTHROPIC_KEY=
-OCR_MODEL=claude-3-5-sonnet-20240620
-STRUCTURED_OUTPUTS_MODEL=claude-3-haiku-20240307
-```
-
-8. Prefect library requires a server to be running for viewing and executing flows. use the starter scripts to spin it up
-> .\start_prefect.ps1
-9. Start core workflow application
+4. Start core workflow application
 > Run file workflow\deploy_main_flow.py from Pycharm or VS code if you want to use GUI to trigger flow
 
-10. Navigate to http://localhost:4200/ and go to deployments tab
-
+### Run flow for sample image
+1. Navigate to http://localhost:4200/ and go to deployments tab 
 ![image](https://github.com/user-attachments/assets/7b576e5c-1980-47a1-bd84-6d6b9a85051e)
 
-11. Click on 3 dots -> quick run -> Feed in required parameters and click Run
+2. Click on 3 dots -> quick run -> Feed in required parameters and click Run
 ![image](https://github.com/user-attachments/assets/f06fcfaa-a39d-44db-82e2-38cf6cbd259a)
 
-12. Go to runs tab to see execution
+3. Go to runs tab to see execution
 ![image](https://github.com/user-attachments/assets/392b150a-1b94-4ee8-95b2-3377f3999c6b)
-
-## Run in docker
-
-Go to docker-compose.yml file and update the volume mount path which currently points to my desktop folder
-Images that need to be submitted to workflow should be saved in this folder and while triggering flow file_path should be /input/<file-name>
-
-> docker build -t rx-workflow:0.1.0 .
-
-> docker compose up
-

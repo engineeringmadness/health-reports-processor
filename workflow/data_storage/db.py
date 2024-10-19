@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 import os
 
@@ -10,6 +10,7 @@ class PostgresConnection:
         self.host = os.environ['PG_HOST']
         self.port = os.environ['PG_PORT']
         self.database = os.environ['PG_DATABASE']
+        self.schema = os.environ['PG_APP_SCHEMA']
         # Setup connection pooling to handle multiple workflows using common connection
         self.engine = create_engine(
             url=f'postgresql+psycopg2://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}',
@@ -18,6 +19,8 @@ class PostgresConnection:
         )
 
     def get_session(self):
-        return sessionmaker(bind=self.engine)()
+        session = sessionmaker(bind=self.engine)()
+        session.execute(text(f"SET search_path TO {self.schema}"))
+        return session
 
 db = PostgresConnection()
