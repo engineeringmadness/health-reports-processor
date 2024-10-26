@@ -39,15 +39,31 @@ def save_schedule(schedule: list[dict[str, str]], prescription_id: str):
     session.commit()
     session.close()
 
-def save_raw_data(text: str, prescription_id: str):
+def save_raw_data(text: str, prescription_id: str, cost):
     """
     Save raw text from OCR layer in case of reprocessing or backfilling
     :param text: raw text output
     :param prescription_id: primary key of prescription coming from BFF
+    :param cost: cost of tokens (input + output)
     :return:
     """
     session = db.get_session()
-    data = OcrOutput(document_id=prescription_id, raw_data=text)
+    data = OcrOutput(document_id=prescription_id, raw_data=text, ocr_cost=cost)
     session.add(data)
+    session.commit()
+    session.close()
+
+def update_raw_data(json_dump: str, prescription_id: str, cost):
+    """
+    Saves the structured output layer json in case of reprocessing or backfilling
+    :param json_dump: json output
+    :param prescription_id: primary key of prescription coming from BFF
+    :param cost: cost of tokens (input + output)
+    :return:
+    """
+    session = db.get_session()
+    data: OcrOutput = session.query(OcrOutput).get(prescription_id)
+    data.json_dump = json_dump
+    data.json_cost = cost
     session.commit()
     session.close()

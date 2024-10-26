@@ -24,7 +24,10 @@ class PrescriptionSchedule(Base):
     frequency = db.Column(db.Text)
 
 class OcrOutput(Base):
-    __tablename__ = 'ocr_output'
+    __tablename__ = 'document_parsing'
 
     document_id = db.Column(db.String(256), primary_key=True)
     raw_data = db.Column(db.Text)
+    ocr_cost = db.Column(db.Double)
+    json_dump = db.Column(db.Text)
+    json_cost = db.Column(db.Double)

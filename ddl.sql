@@ -16,7 +16,10 @@ CREATE TABLE IF NOT EXISTS app_main.prescription_schedule (
 	frequency text
 );
 
-CREATE TABLE IF NOT EXISTS app_main.ocr_output (
+CREATE TABLE IF NOT EXISTS app_main.document_parsing (
 	document_id character varying(256) primary key,
-	raw_data text
+	raw_data text,
+	ocr_cost numeric,
+	json_dump text,
+	json_cost numeric
 );
