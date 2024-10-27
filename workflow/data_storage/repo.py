@@ -1,13 +1,17 @@
 from workflow.data_storage.db import db
 from workflow.data_storage.entities import PrescriptionSchedule, PrescriptionAttributes, OcrOutput
+from workflow.schemas.Prescription import Prescription
+
 
 def save_extracted_data(attributes: dict[str, str], prescription_id: str):
     """
-    Save master data attributes from the prescription image
+    Save master data attributes from the prescription image and schedules
     :param attributes: dictionary created from JSON outputs
     :param prescription_id: primary key of prescription coming from BFF
     :return:
     """
+    session = db.get_session()
+
     master = PrescriptionAttributes(
         doctor_name=attributes['doctorName'],
         prescription_date=attributes['prescriptionDate'],
@@ -15,29 +19,43 @@ def save_extracted_data(attributes: dict[str, str], prescription_id: str):
         doctor_address = attributes['doctorAddress'],
         diagnoses = attributes['diagnoses']
     )
-
-    session = db.get_session()
-    session.add(master)
-    session.commit()
-    session.close()
-
-def save_schedule(schedule: list[dict[str, str]], prescription_id: str):
-    """
-    Save the different medicines included in prescription
-    :param schedule: Regimen of medicine and their frequencies
-    :param prescription_id: primary key of prescription coming from BFF
-    :return:
-    """
-    session = db.get_session()
-
-    for entry in schedule:
+    for entry in attributes['medicines']:
         line_item = PrescriptionSchedule(medicine_name=entry['medicineName'],
                                          frequency=entry['medicineFrequency'],
                                          prescription_id=prescription_id)
         session.add(line_item)
 
+    session.add(master)
     session.commit()
     session.close()
+
+
+def save_extracted_data_typed(prescription: Prescription, prescription_id: str):
+    """
+    Save prescription model into DB
+    :param attributes: Pydantic model representing prescription
+    :param prescription_id: primary key of prescription coming from BFF
+    :return:
+    """
+    session = db.get_session()
+
+    master = PrescriptionAttributes(
+        doctor_name=prescription.doctorName,
+        prescription_date=prescription.prescriptionDate,
+        prescription_id=prescription_id,
+        doctor_address = prescription.doctorAddress,
+        diagnoses = prescription.diagnoses
+    )
+    for entry in prescription.medicines:
+        line_item = PrescriptionSchedule(medicine_name=entry.medicineName,
+                                         frequency=entry.medicineFrequency,
+                                         prescription_id=prescription_id)
+        session.add(line_item)
+
+    session.add(master)
+    session.commit()
+    session.close()
+
 
 def save_raw_data(text: str, prescription_id: str, cost):
     """

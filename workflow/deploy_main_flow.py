@@ -1,5 +1,4 @@
-from workflow.flows.prescription_flow import main_flow
-from workflow.flows.healthcheck import healthcheck
+from workflow.flows.prescription_flow_v2 import main_flow
 import uuid
 
 if __name__ == '__main__':

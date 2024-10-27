@@ -1,7 +1,7 @@
 from markdown_it.rules_inline import image
 from prefect import flow, get_run_logger
 from workflow.conversion.structured_outputs import convert_to_json
-from workflow.conversion.prompts import SpecificPrompts
+from workflow.conversion.constants import SpecificPrompts
 from workflow.extraction.common_ocr import extract_text_from_doc
 from workflow.data_storage.db_save import save_data_to_db
 from PIL import Image

@@ -44,6 +44,8 @@ services:
       - "4200:4200"
     networks:
       - default
+    depends_on:
+      - postgres
 
 
   rx-flow:
@@ -55,6 +57,8 @@ services:
       <<: *common-variables
     networks:
       - default
+    depends_on:
+      - server
 
   healthcheck:
     image: rx-workflow:0.1.0
@@ -65,6 +69,8 @@ services:
       <<: *common-variables
     networks:
       - default
+    depends_on:
+      - server
 
 
 volumes:
