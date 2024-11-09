@@ -41,6 +41,7 @@ def extract_text_from_doc(image: str, width: int, height: int, image_type: str, 
 
 
 def calculate_total_cost(logger, width: int, height: int, raw_data: str):
+    # Formula for image tokens given on https://docs.anthropic.com/en/docs/build-with-claude/vision
     image_tokens = int((width * height)/750)
     cost1 = calculate_cost_by_tokens(image_tokens, os.environ['OCR_MODEL'], 'input')
     cost2 = calculate_completion_cost(raw_data, os.environ['OCR_MODEL'])

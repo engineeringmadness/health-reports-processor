@@ -9,7 +9,7 @@ from workflow.schemas.Prescription import Prescription
 
 
 @flow(name="rx-e2e-prescription-flow")
-def main_flow(image_path: str, extension: str, prescription_id: str):
+def main_flow(image_path: str, extension: str, prescription_id: str, model: str):
     logger = get_run_logger()
     logger.info('Working on file' + image_path)
     # Load image
@@ -30,10 +30,10 @@ def main_flow(image_path: str, extension: str, prescription_id: str):
 
     # Convert to Pydantic Model
     data: Prescription = convert_to_pydantic(doc_text=text,
-                           model=PydanticModels.PRESCRIPTION,
-                           specific_prompt=SpecificPrompts.PRESCRIPTION,
+                           model=model,
+                           specific_prompt=SpecificPrompts.get_prompt(model),
                            document_id=prescription_id)
     logger.info('Done extracting model from text')
 
     # Save data to DB
-    save_data_to_db(data, prescription_id, PydanticModels.PRESCRIPTION)
+    save_data_to_db(data, prescription_id, model)

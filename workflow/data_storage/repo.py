@@ -1,5 +1,6 @@
 from workflow.data_storage.db import db
-from workflow.data_storage.entities import PrescriptionSchedule, PrescriptionAttributes, OcrOutput
+from workflow.data_storage.entities import PrescriptionSchedule, PrescriptionAttributes, OcrOutput, MedicalReport, \
+    MedicalTest
 from workflow.schemas.Prescription import Prescription
 
 
@@ -33,7 +34,7 @@ def save_extracted_data(attributes: dict[str, str], prescription_id: str):
 def save_extracted_data_typed(prescription: Prescription, prescription_id: str):
     """
     Save prescription model into DB
-    :param attributes: Pydantic model representing prescription
+    :param prescription: Pydantic model representing prescription
     :param prescription_id: primary key of prescription coming from BFF
     :return:
     """
@@ -50,6 +51,36 @@ def save_extracted_data_typed(prescription: Prescription, prescription_id: str):
         line_item = PrescriptionSchedule(medicine_name=entry.medicineName,
                                          frequency=entry.medicineFrequency,
                                          prescription_id=prescription_id)
+        session.add(line_item)
+
+    session.add(master)
+    session.commit()
+    session.close()
+
+
+def save_extracted_data_typed_report(report: MedicalReport, report_id: str):
+    """
+    Save medical report model into DB
+    :param report: Pydantic model representing report
+    :param report_id: primary key of report coming from BFF
+    :return:
+    """
+    session = db.get_session()
+
+    master = MedicalReport(
+        patient_name=report.patient_name,
+        patient_age=report.patient_age,
+        report_date=report.report_date,
+        sample_collection_date=report.sample_collection_date,
+        lab_name=report.lab_name,
+        report_id=report_id
+    )
+    for entry in report.tests:
+        line_item = MedicalTest(test_name=entry.test_name,
+                                         test_value=entry.test_value,
+                                         bio_ref_interval=entry.bio_ref_interval,
+                                         unit=entry.unit,
+                                         report_id=report_id)
         session.add(line_item)
 
     session.add(master)

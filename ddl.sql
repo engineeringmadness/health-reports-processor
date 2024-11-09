@@ -23,3 +23,22 @@ CREATE TABLE IF NOT EXISTS app_main.document_parsing (
 	json_dump text,
 	json_cost numeric
 );
+
+CREATE TABLE IF NOT EXISTS app_main.report_attributes (
+	id bigserial primary key,
+	report_id character varying(256),
+	patient_name character varying(256),
+	patient_age numeric,
+	report_date character varying(50),
+	sample_collection_date character varying(50),
+	lab_name text
+);
+
+CREATE TABLE IF NOT EXISTS app_main.report_tests (
+	id bigserial primary key,
+	report_id character varying(256),
+	test_name text,
+	test_value text,
+	unit text,
+	bio_ref_interval text
+);
