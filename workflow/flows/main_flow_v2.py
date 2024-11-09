@@ -1,13 +1,14 @@
-from markdown_it.rules_inline import image
 from prefect import flow, get_run_logger
-from workflow.conversion.structured_outputs import convert_to_json
-from workflow.conversion.constants import SpecificPrompts
+from workflow.conversion.constants import SpecificPrompts, PydanticModels
+from workflow.conversion.structured_outputs_v2 import convert_to_pydantic
 from workflow.extraction.common_ocr import extract_text_from_doc
-from workflow.data_storage.db_save import save_data_to_db
+from workflow.data_storage.db_save_v2 import save_data_to_db
 from PIL import Image
 import base64
+from workflow.schemas.Prescription import Prescription
 
-@flow(name="rx-e2e-flow")
+
+@flow(name="rx-e2e-prescription-flow")
 def main_flow(image_path: str, extension: str, prescription_id: str):
     logger = get_run_logger()
     logger.info('Working on file' + image_path)
@@ -27,12 +28,12 @@ def main_flow(image_path: str, extension: str, prescription_id: str):
                                  document_id=prescription_id)
     logger.info('Done extracting text from image')
 
-    # Convert to JSON
-    json = convert_to_json(doc_text=text,
-                           schema_file='prescription.json',
+    # Convert to Pydantic Model
+    data: Prescription = convert_to_pydantic(doc_text=text,
+                           model=PydanticModels.PRESCRIPTION,
                            specific_prompt=SpecificPrompts.PRESCRIPTION,
                            document_id=prescription_id)
-    logger.info('Done extracting json from text')
+    logger.info('Done extracting model from text')
 
     # Save data to DB
-    save_data_to_db(json, prescription_id)
+    save_data_to_db(data, prescription_id, PydanticModels.PRESCRIPTION)
