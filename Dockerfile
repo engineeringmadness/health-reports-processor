@@ -7,7 +7,6 @@ RUN pip install -r requirements.txt
 WORKDIR /root/flows
 COPY workflow ./workflow
 
-ENV PREFECT_API_URL=http://host.docker.internal:4200/api
 ENV PYTHONPATH="${PYTHONPATH}:/root/flows/workflow/"
 
 CMD ["python", "workflow/deploy_main_flow.py"]
