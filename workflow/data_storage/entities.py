@@ -33,24 +33,23 @@ class OcrOutput(Base):
     json_cost = db.Column(db.Double)
 
 
-class MedicalTest(Base):
+class TestMetric(Base):
     __tablename__ = 'report_tests'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     report_id = db.Column(db.String(256))
     test_name = db.Column(db.Text)
     test_value = db.Column(db.Text)
-    unit = db.Column(db.Text)
     bio_ref_interval = db.Column(db.Text)
 
 
-class MedicalReport(Base):
+class Report(Base):
     __tablename__ = 'report_attributes'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     report_id = db.Column(db.String(256))
     patient_name = db.Column(db.String(256))
-    patient_age = db.Column(db.Integer)
+    patient_age = db.Column(db.String(256))
     report_date = db.Column(db.Date)
     sample_collection_date = db.Column(db.Date)
-    lab_name = db.Column(db.Text)
+    doctor_name = db.Column(db.Text)

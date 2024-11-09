@@ -1,9 +1,9 @@
 x-common-variables: &common-variables
-  PREFECT_API_URL: http://host.docker.internal:4200/api
+  PREFECT_API_URL: http://${HOST_IP}:4200/api
   PG_USER: postgres
   PG_APP_SCHEMA: app_main
   PG_PASSWORD: ${PG_PASSWORD}
-  PG_HOST: host.docker.internal
+  PG_HOST: ${HOST_IP}
   PG_PORT: 5455
   PG_DATABASE: prescriptions
   ANTHROPIC_KEY: ${ANTHROPIC_KEY}
@@ -31,12 +31,12 @@ services:
     image: prefecthq/prefect:3.0.8-python3.12
     restart: always
     volumes:
-      - prefect:/root/.prefect
+      - C:/Users/${USERNAME}/PrefectStorage:/root/.prefect
     entrypoint: ["/opt/prefect/entrypoint.sh", "prefect", "server", "start"]
     environment:
       <<: *common-variables
-      PREFECT_UI_URL: http://host.docker.internal:4200/api
-      PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://postgres:${PG_PASSWORD}@host.docker.internal:5455/prescriptions
+      PREFECT_UI_URL: http://${HOST_IP}/api
+      PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://postgres:${PG_PASSWORD}@${HOST_IP}:5455/prescriptions
       PREFECT_RESULTS_PERSIST_BY_DEFAULT: true
       PREFECT_LOCAL_STORAGE_PATH: '/root/results/'
       PREFECT_SERVER_API_HOST: 0.0.0.0
@@ -49,7 +49,9 @@ services:
 
 
   rx-flow:
-    image: rx-workflow:0.1.0
+    build:
+      context: .
+      dockerfile: Dockerfile
     entrypoint: ["python", "workflow/deploy_main_flow.py"]
     volumes:
       - C:/Users/${USERNAME}/OneDrive/Desktop:/input
@@ -61,10 +63,10 @@ services:
       - server
 
   healthcheck:
-    image: rx-workflow:0.1.0
+    build:
+      context: .
+      dockerfile: Dockerfile
     entrypoint: ["python", "workflow/deploy_healthcheck.py"]
-    volumes:
-      - C:/Users/${USERNAME}/OneDrive/Desktop:/input
     environment:
       <<: *common-variables
     networks:
@@ -72,9 +74,6 @@ services:
     depends_on:
       - server
 
-
-volumes:
-  prefect:
 
 networks:
   default:

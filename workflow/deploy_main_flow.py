@@ -7,5 +7,5 @@ if __name__ == '__main__':
                     description='Rx OCR pipeline',
                     parameters={"image_path": "",
                                 "extension": "jpeg",
-                                "prescription_id": str(uuid.uuid4()),
+                                "document_id": str(uuid.uuid4()),
                                 "model": PydanticModels.PRESCRIPTION})

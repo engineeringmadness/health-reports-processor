@@ -1,4 +1,5 @@
 from workflow.conversion.constants import PydanticModels
+from workflow.schemas.MedicalReport import MedicalReport
 from workflow.schemas.Prescription import Prescription
 from workflow.utils.agent import get_claude_agent
 from prefect import task, get_run_logger
@@ -13,19 +14,21 @@ def convert_to_pydantic(doc_text: str, model: str, specific_prompt: str, documen
 
     agent = get_claude_agent()
 
-    prescription_schema = PydanticModels.get_model(model).model_json_schema()
+    schema = PydanticModels.get_model(model).model_json_schema()
+    logger.info("Transcribing into schema: " + str(schema))
     tools = [
         {
             "name": "build_object_model",
             "description": f"Build the {model} object",
-            "input_schema": prescription_schema
+            "input_schema": schema
         }
     ]
     prompt = f"""
                 {specific_prompt}
-                If any attribute is not found in the text extract output it as empty string in the JSON.
+                
+                Do not add extra attributes to function call apart from the ones specified in schema.
                 Do not give any extra text in the output apart the usage of provided tool.
-
+                If any of the fields in schema are not found then give it the value of empty string.
                 ###
                 Text -
                 {doc_text} 
@@ -53,9 +56,7 @@ def convert_to_pydantic(doc_text: str, model: str, specific_prompt: str, documen
     logger.info(output)
     total_cost = calculate_total_cost(logger, prompt, str(output))
     update_raw_data(str(output), document_id, total_cost)
-
-    if model == PydanticModels.PRESCRIPTION:
-        return Prescription.model_validate(output)
+    return PydanticModels.get_model(model).model_validate(output)
 
 
 def calculate_total_cost(logger, prompt: str, json_output: str):

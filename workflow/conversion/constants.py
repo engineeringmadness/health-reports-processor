@@ -6,12 +6,14 @@ class SpecificPrompts:
 
     PRESCRIPTION = """
     From the below text of a medical prescription, extract the precise medicine names 
-    and their frequencies and doctor details in the json format.                        
+    and their frequencies and doctor details into provided schema.                        
     """
 
     REPORT = """
-    From the below text of a medical report, extract the precise Test names, values, units,
-    reference intervals along with basic patient details in json format.
+    From the below text of a medical report extract the test results which are given in 
+    test name: test value (ref interval) format in the
+    below text, along with patient name, patient age and the doctor name which has performed the tests
+    into provided schema.
     """
 
     @classmethod

@@ -1,6 +1,6 @@
 from workflow.data_storage.db import db
-from workflow.data_storage.entities import PrescriptionSchedule, PrescriptionAttributes, OcrOutput, MedicalReport, \
-    MedicalTest
+from workflow.data_storage.entities import PrescriptionSchedule, PrescriptionAttributes, OcrOutput, Report, TestMetric
+from workflow.schemas.MedicalReport import MedicalReport
 from workflow.schemas.Prescription import Prescription
 
 
@@ -67,19 +67,18 @@ def save_extracted_data_typed_report(report: MedicalReport, report_id: str):
     """
     session = db.get_session()
 
-    master = MedicalReport(
+    master = Report(
         patient_name=report.patient_name,
         patient_age=report.patient_age,
         report_date=report.report_date,
         sample_collection_date=report.sample_collection_date,
-        lab_name=report.lab_name,
+        doctor_name=report.doctor_name,
         report_id=report_id
     )
-    for entry in report.tests:
-        line_item = MedicalTest(test_name=entry.test_name,
+    for entry in report.test_results:
+        line_item = TestMetric(test_name=entry.test_name,
                                          test_value=entry.test_value,
-                                         bio_ref_interval=entry.bio_ref_interval,
-                                         unit=entry.unit,
+                                         bio_ref_interval=entry.ref_interval,
                                          report_id=report_id)
         session.add(line_item)
 

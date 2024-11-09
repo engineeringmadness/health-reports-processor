@@ -4,10 +4,11 @@ This repo contains batch jobs which will process the incoming scan of medical pr
 docker / kubernetes deployments.
 
 ## Dependencies
-1. prefect (workflow library)
+1. prefect (Workflow Library)
 2. anthropic (Claude LLM)
 3. psycopg2 (PostgreSQL)
 4. sqlalchemy (ORM)
+5. pydantic (Model validations)
 
 ## Basic Design
 ![Prefect Architecture](https://github.com/user-attachments/assets/92e9a94a-b004-46c3-b93c-e931bdad1e97)
@@ -18,21 +19,22 @@ docker / kubernetes deployments.
 ### Prerequisites
 
 - Install and setup Rancher Desktop, Miniconda, IDE of your choice for PostgreSQL and Python
-- PG_PASSWORD & ANTHROPIC_KEY needs to be set as environment variable in windows.
+- PG_PASSWORD & ANTHROPIC_KEY & HOST_IP (from command ipconfig) needs to be set as environment variable in windows.
 
 ### Database initial setup
 > docker compose up postgres
 
-2. Login to DB and execute content of ddl.sql
+2. Login to DB and execute content of ddl.sql via pgAdmin4 or any other tool
 
-### Run Server and DB
+### Run Server and DB with Code debugging
 
-> docker compose up postgres server healthcheck
+> docker compose up postgres server
+
+Then run deploy_main_flow.py via any IDE
 
 ### Run entire system via docker
 
-> docker build -t rx-flow:0.1.0 .
-
+> docker-compose build --no-cache
 > docker compose up
 
 ### To Run Flow code only via IDE (Skip if you want to run entire system via docker compose)
